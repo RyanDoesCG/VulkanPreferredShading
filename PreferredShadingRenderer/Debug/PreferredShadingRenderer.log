@@ -1,0 +1,30 @@
+﻿  VulkanShadingResource.cpp
+  VulkanShaders.cpp
+  VulkanApp.cpp
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\timer.hpp(65): warning C4244: '=': conversion from '__int64' to 'double', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\meshio.hpp(240): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\meshio.hpp(252): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(73): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(74): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(122): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(123): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(421): warning C4244: 'argument': conversion from 'uint32_t' to 'float', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(933): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(939): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(1951): warning C4244: '=': conversion from 'float' to 'uint32_t', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(1952): warning C4244: '=': conversion from 'float' to 'uint32_t', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(2101): warning C4244: '=': conversion from 'float' to 'uint32_t', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(2102): warning C4244: '=': conversion from 'float' to 'uint32_t', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(2513): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(2561): warning C4305: 'argument': truncation from 'double' to 'float'
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(2661): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(2662): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(2667): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\program files (x86)\windows kits\10\include\10.0.16299.0\shared\minwindef.h(130): warning C4005: 'APIENTRY': macro redefinition
+  \\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\include\glfw\glfw3.h(98): note: see previous definition of 'APIENTRY'
+  main.cpp
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\timer.hpp(65): warning C4244: '=': conversion from '__int64' to 'double', possible loss of data
+  Generating Code...
+\\ds.leeds.ac.uk\student\student19\sc17rtn\projectdemos\preferredshadingrenderer\preferredshadingrenderer\vulkanapp.cpp(836): warning C4715: 'VulkanApp::createCommandPool': not all control paths return a value
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  PreferredShadingRenderer.vcxproj -> \\ds.leeds.ac.uk\student\student19\sc17rtn\ProjectDemos\PreferredShadingRenderer\Debug\PreferredShadingRenderer.exe
