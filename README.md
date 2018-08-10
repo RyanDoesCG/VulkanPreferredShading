@@ -1,5 +1,7 @@
 Preferred Shading Renderer
+
 Ryan Needham
+
 2018
 
 	Provided in this Visual Studio solution is a Vulkan implementation
