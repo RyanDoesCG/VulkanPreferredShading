@@ -41,13 +41,12 @@ class VulkanApp
     const uint32_t            WINDOW_HEIGHT;
     const std::string         WINDOW_TITLE;
     const std::array<float,4> WINDOW_CLEAR;
-	const uint32_t			  MAX_FPS = 120;
+    const uint32_t            MAX_FPS = 120;
     GLFWwindow*               window;
+	
+    uint32_t runID;
+    Timer timing;
     
-	Timer timing;
-
-	uint32_t runID;
-
     private:
 
     // Initial Setup
@@ -59,7 +58,7 @@ class VulkanApp
     vk::Result createDevice                 ();
     vk::Result createSwapChain              ();
     vk::Result createDepthBuffer            ();
-	vk::Result createCommandPool            ();
+    vk::Result createCommandPool            ();
     vk::Result createShadingResources       ();
     
     // Uniform Buffers
@@ -91,19 +90,19 @@ class VulkanApp
     vk::Result createShadingCommandBuffers  ();
     vk::Result createRasterCommandBuffers   ();
 
-	void arrangeObjects          ();
+    void arrangeObjects          ();
 
-	void createPhysicsState      ();
-	void updatePhysicsState      ();
+    void createPhysicsState      ();
+    void updatePhysicsState      ();
     
     void updateGeometryUniforms  ();
     void updateShadingUniforms   ();
     void updateRasterUniforms    ();
     
-	void report     ();
+    void report     ();
 
-	void fullRender ();
-	void halfRender ();
+    void fullRender ();
+    void halfRender ();
     void loop       ();
     
     struct VulkanCore {
