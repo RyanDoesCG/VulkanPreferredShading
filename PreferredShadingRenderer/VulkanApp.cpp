@@ -165,15 +165,16 @@ void keyCallback (GLFWwindow* window, int key, int scancode, int action, int mod
         if (action == GLFW_RELEASE) down = 0;
         }
 
-	if (key == GLFW_KEY_F)
-		{
-		if (action == GLFW_PRESS) regenerateMaterials = true;
-		if (action == GLFW_RELEASE) regenerateMaterials = false;
-		}
+    if (key == GLFW_KEY_F)
+	{
+	if (action == GLFW_PRESS) regenerateMaterials = true;
+	if (action == GLFW_RELEASE) regenerateMaterials = false;
+	}
         
     if (key == GLFW_KEY_SPACE)
         {
-		if (action == GLFW_PRESS) animateLights = !animateLights;
+	if (action == GLFW_PRESS) 
+		animateLights = !animateLights;
         }
 
 	if (key == GLFW_KEY_R && action == GLFW_PRESS)
@@ -199,17 +200,16 @@ VulkanApp::VulkanApp (uint32_t width, uint32_t height, std::string title, uint32
         WINDOW_TITLE  (title),
         WINDOW_CLEAR  ({ clear.x, clear.y, clear.z, 1.0f }),
         window        (nullptr),
-		timing        (MAX_FPS),
-		nObjects      (objects)
+	timing        (MAX_FPS),
+	nObjects      (objects)
     { // VulkanApp :: VulkanApp
 
-	shading.BUFFER_SIZE = resolution;
-	shading.interval = interval;
+    shading.BUFFER_SIZE = resolution;
+    shading.interval = interval;
     
-	runID = id;
-	timing.id = runID;
+    runID = id;
+    timing.id = runID;
 
-    // Initial Setup
     if (createWindow                () != vk::Result::eSuccess) ErrorHandler::fatal    ("GLFW Window Creation failure");
     if (createSceneMesh             () != vk::Result::eSuccess) ErrorHandler::fatal    ("Failed to prepare a mesh");
     if (createInstance              () != vk::Result::eSuccess) ErrorHandler::fatal    ("Vulkan instance creation failure");
@@ -218,42 +218,30 @@ VulkanApp::VulkanApp (uint32_t width, uint32_t height, std::string title, uint32
     if (createDevice                () != vk::Result::eSuccess) ErrorHandler::fatal    ("Device creation failure");
     if (createSwapChain             () != vk::Result::eSuccess) ErrorHandler::fatal    ("Swapchain Creation failure");
     if (createDepthBuffer           () != vk::Result::eSuccess) ErrorHandler::fatal    ("Depth Buffer Creation failure");
-	if (createCommandPool           () != vk::Result::eSuccess) ErrorHandler::fatal("Command Pool Creation Failure");
+    if (createCommandPool           () != vk::Result::eSuccess) ErrorHandler::fatal.   ("Command Pool Creation Failure");
     if (createShadingResources      () != vk::Result::eSuccess) ErrorHandler::fatal    ("Shading Resource Creation Failure");
-    
-    // Uniform Buffers
     if (createGeometryUniformBuffer () != vk::Result::eSuccess) ErrorHandler::fatal    ("Geometry Uniform Buffer Creationn failure");
     if (createShadingUniformBuffer  () != vk::Result::eSuccess) ErrorHandler::fatal    ("Shading Uniform Buffer Creationn failure");
     if (createRasterUniformBuffer   () != vk::Result::eSuccess) ErrorHandler::fatal    ("Raster Uniform Buffer Creationn failure");
-    
-    // Descriptor Sets
     if (createDescriptorPool        () != vk::Result::eSuccess) ErrorHandler::fatal    ("Descriptor Pool Creation Failure");
     if (createGeometryDescriptorSet () != vk::Result::eSuccess) ErrorHandler::fatal    ("Geometry Descriptor Set Creation Failure");
     if (createShadingDescriptorSet  () != vk::Result::eSuccess) ErrorHandler::fatal    ("Shading Descriptor Set Creation failure");
     if (createRasterDescriptorSet   () != vk::Result::eSuccess) ErrorHandler::fatal    ("Raster Descriptor Set Creation failure");
-    
     if (createSemaphores            () != vk::Result::eSuccess) ErrorHandler::fatal    ("Semaphore creation failure");
-    
     if (createShadingRenderPass     () != vk::Result::eSuccess) ErrorHandler::fatal    ("Shading Render Pass Creation");
     if (createRasterRenderPass      () != vk::Result::eSuccess) ErrorHandler::fatal    ("Raster Render Pass Creation failure");
-    
     if (createShadingFrameBuffer    () != vk::Result::eSuccess) ErrorHandler::fatal    ("Shading framebuffer creation failure");
     if (createRasterFrameBuffers    () != vk::Result::eSuccess) ErrorHandler::fatal    ("Raster framebuffer Creation failure");
-    
     if (createVertexBuffers         () != vk::Result::eSuccess) ErrorHandler::fatal    ("Vertex Buffer Creation failure");
     if (createIndexBuffers          () != vk::Result::eSuccess) ErrorHandler::fatal    ("Index Buffer Creation failure");
-
     if (createGeometryPipeline      () != vk::Result::eSuccess) ErrorHandler::fatal    ("Geometry Graphics Pipeline Creation Failure");
     if (createShadingPipeline       () != vk::Result::eSuccess) ErrorHandler::fatal    ("Shading Graphics Pipeline Creation Failure");
     if (createRasterPipeline        () != vk::Result::eSuccess) ErrorHandler::fatal    ("Raster Pipeline Creation failure");
-    
     if (createShadingCommandBuffers () != vk::Result::eSuccess) ErrorHandler::fatal    ("Shading Command Pool/Buffer creation failure");
     if (createRasterCommandBuffers  () != vk::Result::eSuccess) ErrorHandler::fatal    ("Raster Command Pool/Buffer creation failure");
 
-	createPhysicsState();
-
-	arrangeObjects();
-
+    createPhysicsState();
+    arrangeObjects();
     loop ();
     
     } // VulkanApp :: VulkanApp
@@ -273,8 +261,8 @@ VulkanApp::~VulkanApp ()
     // destroy semaphores
     core.logicalDevice.destroySemaphore(semaphores.presentReady);
     core.logicalDevice.destroySemaphore(semaphores.renderComplete);
-	core.logicalDevice.destroySemaphore(semaphores.shadingComplete);
-	core.logicalDevice.destroySemaphore(semaphores.rasterComplete);
+    core.logicalDevice.destroySemaphore(semaphores.shadingComplete);
+    core.logicalDevice.destroySemaphore(semaphores.rasterComplete);
 
     // destroy vertex buffer
     core.logicalDevice.destroyBuffer(buffers.sceneVertex.buffer);
@@ -307,10 +295,10 @@ VulkanApp::~VulkanApp ()
     // destroy uniform buffer
     core.logicalDevice.destroyBuffer(buffers.shadingUniform.buffer);
     core.logicalDevice.destroyBuffer(buffers.rasterUniform.buffer);
-	core.logicalDevice.destroyBuffer(buffers.geometryUniform.buffer);
+    core.logicalDevice.destroyBuffer(buffers.geometryUniform.buffer);
 
-	core.logicalDevice.freeMemory(buffers.shadingUniform.memory);
-	core.logicalDevice.freeMemory(buffers.rasterUniform.memory);
+    core.logicalDevice.freeMemory(buffers.shadingUniform.memory);
+    core.logicalDevice.freeMemory(buffers.rasterUniform.memory);
     core.logicalDevice.freeMemory(buffers.geometryUniform.memory);
     
     // destroy depth buffer
@@ -328,8 +316,8 @@ VulkanApp::~VulkanApp ()
     
     VulkanDebug::DestroyDebugReportCallbackEXT((VkInstance)core.instance, callback, nullptr);
 
-	core.logicalDevice.destroy();
-	core.instance.destroy();
+    core.logicalDevice.destroy();
+    core.instance.destroy();
     
     // destroy glfw stuff
     glfwDestroyWindow(window);
@@ -357,10 +345,10 @@ vk::Result VulkanApp::createWindow ()
         
     glfwSetWindowUserPointer(window, this);
 
-	glfwSetKeyCallback(window, keyCallback);
-	glfwSetCursorPosCallback(window, mouseMovementCallback);
-	glfwSetMouseButtonCallback(window, mouseButtonCallback);
-	glfwSetScrollCallback(window, mouseScrollCallback);
+    glfwSetKeyCallback(window, keyCallback);
+    glfwSetCursorPosCallback(window, mouseMovementCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetScrollCallback(window, mouseScrollCallback);
 
     if (window == nullptr)
         return vk::Result::eIncomplete;
@@ -381,7 +369,7 @@ vk::Result VulkanApp::createSceneMesh ()
     // we need a quad mesh for passing over the geometry
     // buffer to compute lighting at each pixel
     meshes.quad.vertices = {
-		{{-1.0f, 0.0f,  1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f, 1.0f }, { 0.0f, 1.0f }, 0},
+	{{-1.0f, 0.0f,  1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f, 1.0f }, { 0.0f, 1.0f }, 0},
         {{-1.0f, 0.0f, -1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f, 1.0f }, { 0.0f, 0.0f }, 0},
         {{ 1.0f, 0.0f, -1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f, 1.0f }, { 1.0f, 0.0f }, 0},
         {{ 1.0f, 0.0f,  1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, 0}};
@@ -390,37 +378,35 @@ vk::Result VulkanApp::createSceneMesh ()
         0, 1, 2,
         2, 3, 0};
     
-	std::uniform_int_distribution<int> dist(0, 3);
+    std::uniform_int_distribution<int> dist(0, 3);
 
-	// the four meshes are pre-loaded and selected from
-	// at random for each object, the selected mesh is then
-	// batched into the render mesh
-	std::vector<std::vector<Vertex>>   vBuffers(1);
-	std::vector<std::vector<uint32_t>> iBuffers(1);
+    // the four meshes are pre-loaded and selected from
+    // at random for each object, the selected mesh is then
+    // batched into the render mesh
+    std::vector<std::vector<Vertex>>   vBuffers(1);
+    std::vector<std::vector<uint32_t>> iBuffers(1);
 
-	for (uint32_t i = 0; i < 1; ++i)
-		{ // for each mesh
+    for (uint32_t i = 0; i < 1; ++i)
+ 	{ // for each mesh
 
-		std::string path = "models/bust_";
-		path += std::to_string(i);
-		path += ".mesh";
+	std::string path = "models/bust_";
+	path += std::to_string(i);
+	path += ".mesh";
 
-		MeshIO::readMeshFile(path.c_str(), vBuffers[i], iBuffers[i]);
+	MeshIO::readMeshFile(path.c_str(), vBuffers[i], iBuffers[i]);
 
-		} // for each mesh
+	} // for each mesh
 
-	for (uint32_t i = 0; i < nObjects; ++i)
-		{ // for each objectssss
+    for (uint32_t i = 0; i < nObjects; ++i)
+	{ // for each objectssss
+	uint32_t model = 0;
+	MeshIO::assign(vBuffers[model], i);
+	MeshIO::merge(meshes.scene.vertices, meshes.scene.indices, vBuffers[model], iBuffers[model]);
+	} // for each object
 
-		uint32_t model = 0;
-		MeshIO::assign(vBuffers[model], i);
-		MeshIO::merge(meshes.scene.vertices, meshes.scene.indices, vBuffers[model], iBuffers[model]);
-
-		} // for each object
-
-	MeshIO::atlas (meshes.scene.vertices, nObjects, shading.BUFFER_SIZE);
-
-	return vk::Result::eSuccess;
+    MeshIO::atlas (meshes.scene.vertices, nObjects, shading.BUFFER_SIZE);
+    
+    return vk::Result::eSuccess;
     
     } // VulkanApp :: createSceneMesh
 
@@ -844,21 +830,21 @@ vk::Result VulkanApp::createShadingResources ()
 
     result = shading.position.init(core.logicalDevice, core.physicalDevice, pipelines.shading.format, shading.BUFFER_SIZE);
     if (result != vk::Result::eSuccess) 
-		return result;
+        return result;
 
     result = shading.normal.init(core.logicalDevice, core.physicalDevice, pipelines.shading.format, shading.BUFFER_SIZE);
     if (result != vk::Result::eSuccess)
-		return result;
+        return result;
 
     result = shading.color.init(core.logicalDevice, core.physicalDevice, pipelines.shading.format, shading.BUFFER_SIZE);
     if (result != vk::Result::eSuccess) 
-		return result;
+        return result;
 
     result = shading.result.init(core.logicalDevice, core.physicalDevice, pipelines.shading.format, shading.BUFFER_SIZE);
     if (result != vk::Result::eSuccess) 
-		return result;
+        return result;
 
-	vk::CommandBuffer commandBuffer = VulkanHelpers::beginSingleUseCommand(core.logicalDevice, command.pool);
+    vk::CommandBuffer commandBuffer = VulkanHelpers::beginSingleUseCommand(core.logicalDevice, command.pool);
 	shading.position .transition(commandBuffer, vk::ImageLayout::eColorAttachmentOptimal);
 	shading.normal   .transition(commandBuffer, vk::ImageLayout::eColorAttachmentOptimal);
 	shading.color    .transition(commandBuffer, vk::ImageLayout::eColorAttachmentOptimal);
@@ -897,12 +883,12 @@ vk::Result VulkanApp::createGeometryUniformBuffer ()
     core.logicalDevice.getBufferMemoryRequirements(buffers.geometryUniform.buffer, &bufferRequirements);
 
     vk::MemoryAllocateInfo allocationInfo = { };
-    allocationInfo.allocationSize  = bufferRequirements.size;
-    allocationInfo.memoryTypeIndex = VulkanHelpers::findMemoryType(
-        core.physicalDevice,
-        bufferRequirements.memoryTypeBits,
-        vk::MemoryPropertyFlagBits::eHostVisible |
-        vk::MemoryPropertyFlagBits::eHostCoherent);
+        allocationInfo.allocationSize  = bufferRequirements.size;
+        allocationInfo.memoryTypeIndex = VulkanHelpers::findMemoryType(
+            core.physicalDevice,
+            bufferRequirements.memoryTypeBits,
+            vk::MemoryPropertyFlagBits::eHostVisible |
+            vk::MemoryPropertyFlagBits::eHostCoherent);
         
     result = core.logicalDevice.allocateMemory(&allocationInfo, nullptr, &buffers.geometryUniform.memory);
     if (result != vk::Result::eSuccess)
@@ -912,7 +898,8 @@ vk::Result VulkanApp::createGeometryUniformBuffer ()
     void* data;
 
     result = core.logicalDevice.mapMemory(buffers.geometryUniform.memory, 0, VK_WHOLE_SIZE, vk::MemoryMapFlags { }, &data);
-    if (result != vk::Result::eSuccess) return result;
+    if (result != vk::Result::eSuccess) 
+        return result;
 
     memcpy(data, &ubo.geometry, (size_t)size);
 
@@ -930,15 +917,15 @@ vk::Result VulkanApp::createShadingUniformBuffer ()
     { // VulkanApp :: createShadingUniformBuffer
     vk::Result result = vk::Result::eSuccess;
     
-		eyePosition.y = sqrt(nObjects) * 2.0f;
+    eyePosition.y = sqrt(nObjects) * 2.0f;
 
     ubo.shading.lightPosition = glm::vec4(lightPosition.x, lightPosition.y, lightPosition.z, 1.0);
     ubo.shading.eyePosition   = glm::vec4(eyePosition.x, eyePosition.y, eyePosition.z, 1.0);
 
-	std::uniform_real_distribution<float> dist (0.0, 1.0);
-	rng.seed(time(0));
-	for (uint32_t i = 0; i < nObjects; ++i)
-		ubo.shading.materials[i] = { dist(rng), dist(rng), dist(rng), dist(rng) };
+    std::uniform_real_distribution<float> dist (0.0, 1.0);
+    rng.seed(time(0));
+    for (uint32_t i = 0; i < nObjects; ++i)
+        ubo.shading.materials[i] = { dist(rng), dist(rng), dist(rng), dist(rng) };
     
     // then once we have an acceptable default we can set up
     // a buffer that we'll use to pass the data to the GPU
@@ -961,12 +948,12 @@ vk::Result VulkanApp::createShadingUniformBuffer ()
     core.logicalDevice.getBufferMemoryRequirements(buffers.shadingUniform.buffer, &bufferRequirements);
 
     vk::MemoryAllocateInfo allocationInfo = { };
-    allocationInfo.allocationSize  = bufferRequirements.size;
-    allocationInfo.memoryTypeIndex = VulkanHelpers::findMemoryType(
-        core.physicalDevice,
-        bufferRequirements.memoryTypeBits,
-        vk::MemoryPropertyFlagBits::eHostVisible |
-        vk::MemoryPropertyFlagBits::eHostCoherent);
+        allocationInfo.allocationSize  = bufferRequirements.size;
+        allocationInfo.memoryTypeIndex = VulkanHelpers::findMemoryType(
+            core.physicalDevice,
+            bufferRequirements.memoryTypeBits,
+            vk::MemoryPropertyFlagBits::eHostVisible |
+            vk::MemoryPropertyFlagBits::eHostCoherent);
         
     result = core.logicalDevice.allocateMemory(&allocationInfo, nullptr, &buffers.shadingUniform.memory);
     if (result != vk::Result::eSuccess)
@@ -976,7 +963,8 @@ vk::Result VulkanApp::createShadingUniformBuffer ()
     void* data;
 
     result = core.logicalDevice.mapMemory(buffers.shadingUniform.memory, 0, VK_WHOLE_SIZE, vk::MemoryMapFlags { }, &data);
-    if (result != vk::Result::eSuccess) return result;
+    if (result != vk::Result::eSuccess) 
+        return result;
 
     memcpy(data, &ubo.shading, (size_t)size);
 
@@ -1023,12 +1011,12 @@ vk::Result VulkanApp::createRasterUniformBuffer ()
     core.logicalDevice.getBufferMemoryRequirements(buffers.rasterUniform.buffer, &bufferRequirements);
 
     vk::MemoryAllocateInfo allocationInfo = { };
-    allocationInfo.allocationSize  = bufferRequirements.size;
-    allocationInfo.memoryTypeIndex = VulkanHelpers::findMemoryType(
-        core.physicalDevice,
-        bufferRequirements.memoryTypeBits,
-        vk::MemoryPropertyFlagBits::eHostVisible |
-        vk::MemoryPropertyFlagBits::eHostCoherent);
+        allocationInfo.allocationSize  = bufferRequirements.size;
+        allocationInfo.memoryTypeIndex = VulkanHelpers::findMemoryType(
+            core.physicalDevice,
+            bufferRequirements.memoryTypeBits,
+            vk::MemoryPropertyFlagBits::eHostVisible |
+            vk::MemoryPropertyFlagBits::eHostCoherent);
         
     result = core.logicalDevice.allocateMemory(&allocationInfo, nullptr, &buffers.rasterUniform.memory);
     if (result != vk::Result::eSuccess)
@@ -1038,7 +1026,8 @@ vk::Result VulkanApp::createRasterUniformBuffer ()
     void* data;
 
     result = core.logicalDevice.mapMemory(buffers.rasterUniform.memory, 0, VK_WHOLE_SIZE, vk::MemoryMapFlags { }, &data);
-    if (result != vk::Result::eSuccess) return result;
+    if (result != vk::Result::eSuccess) 
+        return result;
 
     memcpy(data, &ubo.raster, (size_t)size);
 
@@ -1062,8 +1051,8 @@ vk::Result VulkanApp::createDescriptorPool ()
         sizes[1].type             = vk::DescriptorType::eInputAttachment;
         sizes[1].descriptorCount  = 3;
 
-		sizes[2].type             = vk::DescriptorType::eCombinedImageSampler;
-		sizes[2].descriptorCount  = 1;
+	sizes[2].type             = vk::DescriptorType::eCombinedImageSampler;
+	sizes[2].descriptorCount  = 1;
         
     vk::DescriptorPoolCreateInfo poolCreateInfo = { };
         poolCreateInfo.poolSizeCount = 3;
@@ -1384,17 +1373,17 @@ vk::Result VulkanApp::createSemaphores ()
     if (result != vk::Result::eSuccess)
         return result;
 
-	result = core.logicalDevice.createSemaphore(&semaphoreCreateInfo, nullptr, &semaphores.renderComplete);
-	if (result != vk::Result::eSuccess)
-		return result;
+    result = core.logicalDevice.createSemaphore(&semaphoreCreateInfo, nullptr, &semaphores.renderComplete);
+    if (result != vk::Result::eSuccess)
+	return result;
 
-	result = core.logicalDevice.createSemaphore(&semaphoreCreateInfo, nullptr, &semaphores.shadingComplete);
-	if (result != vk::Result::eSuccess)
-		return result;
+    result = core.logicalDevice.createSemaphore(&semaphoreCreateInfo, nullptr, &semaphores.shadingComplete);
+    if (result != vk::Result::eSuccess)
+ 	return result;
         
-	result = core.logicalDevice.createSemaphore(&semaphoreCreateInfo, nullptr, &semaphores.rasterComplete);
-	if (result != vk::Result::eSuccess)
-		return result;
+    result = core.logicalDevice.createSemaphore(&semaphoreCreateInfo, nullptr, &semaphores.rasterComplete);
+    if (result != vk::Result::eSuccess)
+ 	return result;
 
     return result;
     
@@ -1516,9 +1505,7 @@ vk::Result VulkanApp::createShadingRenderPass ()
         dependencies[2].srcStageMask     = vk::PipelineStageFlagBits::eColorAttachmentOutput;
         dependencies[2].dstStageMask     = vk::PipelineStageFlagBits::eBottomOfPipe;
         dependencies[2].srcAccessMask    = vk::AccessFlagBits { };
-        //    vk::AccessFlagBits::eColorAttachmentRead |
-        //    vk::AccessFlagBits::eColorAttachmentWrite;
-		dependencies[2].dstAccessMask = vk::AccessFlagBits { };
+	dependencies[2].dstAccessMask    = vk::AccessFlagBits { };
         dependencies[2].dependencyFlags  = vk::DependencyFlagBits::eByRegion;
     
     vk::RenderPassCreateInfo createInfo = { };
@@ -2485,13 +2472,11 @@ vk::Result VulkanApp::createRasterCommandBuffers ()
         vk::DeviceSize offsets[] = { 0 };
         
         swapchain.commandBuffers[i].beginRenderPass(&renderPassBeginInfo, vk::SubpassContents::eInline);
-        
-            swapchain.commandBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, pipelines.raster.pipeline);
-            swapchain.commandBuffers[i].bindVertexBuffers(0, 1, &buffers.sceneVertex.buffer, offsets);
-            swapchain.commandBuffers[i].bindIndexBuffer(buffers.sceneIndex.buffer, 0, vk::IndexType::eUint32);
-            swapchain.commandBuffers[i].bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelines.raster.layout, 0, 1, &pipelines.raster.descriptorSet, 0, nullptr);
-            swapchain.commandBuffers[i].drawIndexed(static_cast<uint32_t>(meshes.scene.indices.size()), 1, 0, 0, 0);
-    
+        swapchain.commandBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, pipelines.raster.pipeline);
+        swapchain.commandBuffers[i].bindVertexBuffers(0, 1, &buffers.sceneVertex.buffer, offsets);
+        swapchain.commandBuffers[i].bindIndexBuffer(buffers.sceneIndex.buffer, 0, vk::IndexType::eUint32);
+        swapchain.commandBuffers[i].bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelines.raster.layout, 0, 1, &pipelines.raster.descriptorSet, 0, nullptr);
+        swapchain.commandBuffers[i].drawIndexed(static_cast<uint32_t>(meshes.scene.indices.size()), 1, 0, 0, 0);
         swapchain.commandBuffers[i].endRenderPass();
         swapchain.commandBuffers[i].end();
 
@@ -2506,48 +2491,38 @@ vk::Result VulkanApp::createRasterCommandBuffers ()
 //
 //
 void VulkanApp::arrangeObjects ()
-	{ // VulkanApp :: arrangeObjects
+    { // VulkanApp :: arrangeObjects
 
-	if (!arrangement.arranged)
-		{
-		int m = sqrt(nObjects);
+    if (!arrangement.arranged)
+        {
+        int m = sqrt(nObjects);
+        arrangement.translations.resize(nObjects);
+        arrangement.centre = { 0.0f, 0.0f, 0.0f };
 
-		arrangement.translations.resize(nObjects);
-		arrangement.centre = { 0.0f, 0.0f, 0.0f };
+	for (Vertex& v : meshes.scene.vertices)
+            { // for each vertex
+            arrangement.translations[v.id] = {
+                (v.id % m) * offset,
+                0.0f, 
+                (v.id / m) * offset};
+            } // for each vertex
 
-		for (Vertex& v : meshes.scene.vertices)
-			{ // for each vertex
+        for (uint32_t i = 0; i < nObjects; ++i)
+	    arrangement.centre += arrangement.translations[i];
 
-			arrangement.translations[v.id] = {
-				(v.id % m) * offset,
-				0.0f, 
-				(v.id / m) * offset};
+        arrangement.centre /= nObjects;
+        arrangement.arranged = true;
+        }
 
-			} // for each vertex
-
-		for (uint32_t i = 0; i < nObjects; ++i)
-			arrangement.centre += arrangement.translations[i];
-
-		arrangement.centre /= nObjects;
-
-		arrangement.arranged = true;
-
-		}
-
-
-	for (uint32_t i = 0; i < nObjects; ++i)
-		{ // for each object
-		
-		ubo.geometry.model[i] = glm::mat4(1.0f);
-		ubo.geometry.model[i] = glm::translate(ubo.geometry.model[i], arrangement.translations[i] - arrangement.centre);
-		ubo.geometry.model[i] = glm::scale(ubo.geometry.model[i], glm::vec3(0.5f, 0.5f, 0.5f));
-		ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		//ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		ubo.raster.model[i] = ubo.geometry.model[i];
-
-		simulation.positions[i] = arrangement.translations[i] - arrangement.centre;
-
-		} // for each object
+        for (uint32_t i = 0; i < nObjects; ++i)
+            { // for each object	
+            ubo.geometry.model[i] = glm::mat4(1.0f);
+            ubo.geometry.model[i] = glm::translate(ubo.geometry.model[i], arrangement.translations[i] - arrangement.centre);
+            ubo.geometry.model[i] = glm::scale(ubo.geometry.model[i], glm::vec3(0.5f, 0.5f, 0.5f));
+            ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+            ubo.raster.model[i] = ubo.geometry.model[i];
+            simulation.positions[i] = arrangement.translations[i] - arrangement.centre;
+            } // for each object
 
 	} // VulkanApp :: arrangeObjects
 
@@ -2556,67 +2531,63 @@ void VulkanApp::arrangeObjects ()
 //
 //
 void VulkanApp::createPhysicsState ()
-	{ // VulkanApp :: createPhysicsState
+    { // VulkanApp :: createPhysicsState
 		
-	std::uniform_real_distribution<float> posDist (-0.01, 0.01);
-	std::uniform_real_distribution<float> angDist(-10.0, 10.0);
+    std::uniform_real_distribution<float> posDist (-0.01, 0.01);
+    std::uniform_real_distribution<float> angDist(-10.0, 10.0);
 
-	simulation.positions.resize(nObjects);
-	simulation.velocities.resize(nObjects);
-	simulation.orientations.resize(nObjects);
-	simulation.rotations.resize(nObjects);
+    simulation.positions.resize(nObjects);
+    simulation.velocities.resize(nObjects);
+    simulation.orientations.resize(nObjects);
+    simulation.rotations.resize(nObjects);
 
-	for (uint32_t i = 0; i < nObjects; ++i)
-		{ // for each object
+    for (uint32_t i = 0; i < nObjects; ++i)
+        { // for each object
+        simulation.velocities[i]   = glm::vec3(posDist(rng), posDist(rng), posDist(rng));
+        simulation.rotations[i]    = glm::vec3(angDist(rng), angDist(rng), angDist(rng));
+        simulation.orientations[i] = glm::vec3(0.0f, 0.0f, 0.0f);
+        simulation.bounds          = 2.0f;
+        } // for each object
 
-		simulation.velocities[i] = glm::vec3(posDist(rng), posDist(rng), posDist(rng));
-		simulation.rotations[i] = glm::vec3(angDist(rng), angDist(rng), angDist(rng));
-		simulation.orientations[i] = glm::vec3(0.0f, 0.0f, 0.0f);
-		simulation.bounds = 2.0f;
-
-		} // for each object
-
-
-
-	} // VulkanApp :: createPhysicsState
+    } // VulkanApp :: createPhysicsState
 
 
 //
 //
 //
 void VulkanApp::updatePhysicsState ()
-	{ // VulkanApp :: updatePhysicsState
+    { // VulkanApp :: updatePhysicsState
 
-	// advance the simulation
-	for (uint32_t i = 0; i < nObjects; ++i)
-		{
-		simulation.positions[i] += simulation.velocities[i] * (float)timing.delta * 0.05f;
-		simulation.orientations[i] += simulation.rotations[i] * (float)timing.delta * 0.005f;
-		}
+    // advance the simulation
+    for (uint32_t i = 0; i < nObjects; ++i)
+        {
+        simulation.positions[i] += simulation.velocities[i] * (float)timing.delta * 0.05f;
+        simulation.orientations[i] += simulation.rotations[i] * (float)timing.delta * 0.005f;
+        }
 
-	// collide with boundary
-	for (uint32_t i = 0; i < nObjects; ++i)
-		if (glm::length(simulation.positions[i]) > 12.0f)
-			{ 
-			//simulation.positions[i] = glm::normalize(simulation.positions[i]) * (nObjects * 0.9f);
-			simulation.velocities[i] = glm::normalize(simulation.positions[i]) * -0.01f;
-			}
+    // collide with boundary
+    for (uint32_t i = 0; i < nObjects; ++i)
+        if (glm::length(simulation.positions[i]) > 12.0f)
+            { 
+            //simulation.positions[i] = glm::normalize(simulation.positions[i]) * (nObjects * 0.9f);
+            simulation.velocities[i] = glm::normalize(simulation.positions[i]) * -0.01f;
+            }
 
+    // collide with eachother
+    for (uint32_t i = 0; i < nObjects; ++i)
+        for (uint32_t j = 0; j < nObjects; ++j)
+            {
+            if (i == j) 
+                continue;
 
-	// collide with eachother
-	for (uint32_t i = 0; i < nObjects; ++i)
-		for (uint32_t j = 0; j < nObjects; ++j)
-			{
-			if (i == j) continue;
-
-			float minDist = simulation.bounds;
-			float actDist = glm::length(simulation.positions[i] - simulation.positions[j]);
-			if (actDist < minDist)
-				{ 
-				simulation.velocities[i] = glm::normalize(simulation.positions[i] - simulation.positions[j]) * 0.01f;
-				simulation.velocities[j] = glm::normalize(simulation.positions[j] - simulation.positions[i]) * 0.01f;
-				}
-			}
+            float minDist = simulation.bounds;
+            float actDist = glm::length(simulation.positions[i] - simulation.positions[j]);
+            if (actDist < minDist)
+                { 
+                simulation.velocities[i] = glm::normalize(simulation.positions[i] - simulation.positions[j]) * 0.01f;
+                simulation.velocities[j] = glm::normalize(simulation.positions[j] - simulation.positions[i]) * 0.01f;
+                }
+            }
 
 	} // VulkanApp :: updatePhysicsState
 
@@ -2627,25 +2598,21 @@ void VulkanApp::updatePhysicsState ()
 void VulkanApp::updateGeometryUniforms ()
     { // VulkanApp :: updateGeometryUniforms
 
-	for (uint32_t i = 0; i < nObjects; ++i)
+    for (uint32_t i = 0; i < nObjects; ++i)
         {
-
-		ubo.geometry.model[i] = glm::mat4(1.0f);
-		ubo.geometry.model[i] = glm::translate(ubo.geometry.model[i], simulation.positions[i]);
-		ubo.geometry.model[i] = glm::scale(ubo.geometry.model[i], glm::vec3(0.5f, 0.5f, 0.5f));
-		ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		//ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-		ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(simulation.orientations[i].z), glm::vec3(0.0f, 0.0f, 1.0f));
-		ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(simulation.orientations[i].y), glm::vec3(0.0f, 1.0f, 0.0f));
-		ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(simulation.orientations[i].x), glm::vec3(1.0f, 0.0f, 0.0f));
-
+        ubo.geometry.model[i] = glm::mat4(1.0f);
+        ubo.geometry.model[i] = glm::translate(ubo.geometry.model[i], simulation.positions[i]);
+        ubo.geometry.model[i] = glm::scale(ubo.geometry.model[i], glm::vec3(0.5f, 0.5f, 0.5f));
+        ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(simulation.orientations[i].z), glm::vec3(0.0f, 0.0f, 1.0f));
+        ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(simulation.orientations[i].y), glm::vec3(0.0f, 1.0f, 0.0f));
+        ubo.geometry.model[i] = glm::rotate(ubo.geometry.model[i], glm::radians(simulation.orientations[i].x), glm::vec3(1.0f, 0.0f, 0.0f));
         }
 
-	void* data;
-	core.logicalDevice.mapMemory(buffers.geometryUniform.memory, 0, VK_WHOLE_SIZE, vk::MemoryMapFlags{}, &data);
-	memcpy(data, &ubo.geometry, sizeof(UniformBufferObjects::GeometryUBO));
-	core.logicalDevice.unmapMemory(buffers.geometryUniform.memory);
+    void* data;
+    core.logicalDevice.mapMemory(buffers.geometryUniform.memory, 0, VK_WHOLE_SIZE, vk::MemoryMapFlags{}, &data);
+    memcpy(data, &ubo.geometry, sizeof(UniformBufferObjects::GeometryUBO));
+    core.logicalDevice.unmapMemory(buffers.geometryUniform.memory);
 
     } // VulkanApp :: updateGeometryUniforms
 
@@ -2667,8 +2634,11 @@ void VulkanApp::updateShadingUniforms ()
 		rng.seed(time(0));
 		std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 		for (uint32_t i = 0; i < nObjects; ++i)
-			ubo.shading.materials[i] =
-				{ dist(rng), dist(rng), dist(rng), dist(rng) };
+			ubo.shading.materials[i] = { 
+                dist(rng), 
+                dist(rng), 
+                dist(rng), 
+                dist(rng) };
 
 		regenerateMaterials = false;
 		}
